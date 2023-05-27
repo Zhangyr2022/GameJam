@@ -26,12 +26,15 @@ public class Weapon : MonoBehaviour
     [Space]
     public AudioSource StuckSource;
     public AudioSource PickupSource;
-    public AudioItem[] PickupSounds;
     public AudioSource SpinningSource;
+    public AudioSource DropSource;
+
+    public AudioItem[] PickupSounds;
+    public AudioItem DropSound;
     public Vector2 SpinningPitch = new Vector2(0.8f, 1f);
 
-
-
+    public const float AOERange = 5;
+    public const float AOEDamage = 1;
     public enum WeaponState
     {
         Idle,
@@ -63,6 +66,24 @@ public class Weapon : MonoBehaviour
         this.Blood = GameObject.Find("Particals");
         this.WeaponBody = this.GetComponent<Rigidbody>();
         SetBloodActive(false);
+        this.WobbleRoot = this.transform;
+        this.RotateAround = this.transform;
+        // Audio sources
+        AudioSource[] audioSources = this.GetComponents<AudioSource>();
+        this.StuckSource = audioSources[0];
+        this.PickupSource = audioSources[1];
+        this.SpinningSource = audioSources[2];
+        this.DropSource = audioSources[3];
+        // Pickup Sounds
+        List<AudioItem> pickupSoundsList = new();
+        for (int i = 1; i <= 3; i++)
+        {
+            pickupSoundsList.Add(new AudioItem(Resources.Load<AudioClip>($"Audio/flying{i}")));
+        }
+        this.PickupSounds = pickupSoundsList.ToArray();
+
+        // Drop sound
+        this.DropSound = new AudioItem(Resources.Load<AudioClip>($"Audio/placeCane"));
     }
 
     public void SetBloodActive(bool active)
@@ -155,6 +176,8 @@ public class Weapon : MonoBehaviour
     {
         if (State is WeaponState.Throwing or WeaponState.Retrieving)
             return;
+        // Play sound
+        this.DropSound.PlayOn(this.DropSource);
 
         WeaponBody.isKinematic = false;
 
@@ -171,6 +194,7 @@ public class Weapon : MonoBehaviour
 
         WeaponBody.constraints = RigidbodyConstraints.None;
         State = WeaponState.Idle;
+
     }
 
     public void Throw(Vector3 direction, float speed)
@@ -284,5 +308,12 @@ public class Weapon : MonoBehaviour
             }
             BulletManager.Instance.CreateBullet(this.transform.position, direction, bulletMode);
         }
+    }
+    /// <summary>
+    /// AOE method
+    /// </summary>
+    public void AOEShoot()
+    {
+        EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
     }
 }

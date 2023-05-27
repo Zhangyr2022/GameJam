@@ -56,7 +56,7 @@ public class PlayerCamera : MonoBehaviour
 
         if (CurrentShakeStrength > 0.001f)
         {
-            //Camera.transform.localPosition = Noisy.Noise3D(_shakeT, 1f, CurrentShakeStrength, 0.5f, 2f, 1);
+            Camera.transform.localPosition = Noisy.Noise3D(_shakeT, 1f, CurrentShakeStrength, 0.5f, 2f, 1);
         }
     }
 

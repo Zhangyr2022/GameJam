@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     public const float AOERange = 5f;
     public const float ShootDamage = 2f;
     public const float ShootRange = 20f;
+    public const float TravelSpeed = 5f;
 
     public enum BulletMode
     {
@@ -28,11 +29,11 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.Translate(_shootDirection);
+        this.transform.Translate(Time.deltaTime * TravelSpeed * _shootDirection);
         // Check if the distance is in the shoot range
         if (Vector3.Distance(this.transform.position, this._shooterPosition) > ShootRange)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
 

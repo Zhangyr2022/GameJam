@@ -73,7 +73,21 @@ public class Player : MonoBehaviour
         // Compute bullet direction
         Vector3 direction = GetMouseWorldPosition() - this.transform.position;
 
-        Weapon.Instance.ShootBullets(direction);
+        // Whether the mouse touches the enemy
+        GameObject mouseRaycastObject = GetMouseRaycastObject();
+        if (mouseRaycastObject is not null)
+        {
+            if (mouseRaycastObject.layer == LayerMask.NameToLayer("enemy"))
+            {
+                // Shoot
+                Weapon.Instance.ShootBullets(direction);
+            }
+            else
+            {
+                // AOE
+                Weapon.Instance.AOEShoot();
+            }
+        }
     }
 
 
@@ -88,6 +102,11 @@ public class Player : MonoBehaviour
         this.PlayerInputHandler = PlayerInput.Instance;
         this.rig = this.transform;
         this.rb = this.GetComponent<Rigidbody>();
+        // FootStep Sound
+        FootstepSource = this.GetComponent<AudioSource>();
+        List<AudioItem> footstepsSoundList = new();
+        footstepsSoundList.Add(new AudioItem(Resources.Load<AudioClip>("Audio/FootStep")));
+        this.Footsteps = footstepsSoundList.ToArray();
     }
     private void FixedUpdate()
     {
@@ -176,5 +195,17 @@ public class Player : MonoBehaviour
         }
 
         return default;
+    }
+
+    private GameObject GetMouseRaycastObject()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            return hit.collider.gameObject;
+        }
+
+        return null;
     }
 }

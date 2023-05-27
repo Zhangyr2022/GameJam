@@ -24,6 +24,6 @@ public class BulletManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        this._bulletPrefab = Resources.Load<GameObject>("Bullets");
+        this._bulletPrefab = Resources.Load<GameObject>("Prefabs/Bullet");
     }
 }

@@ -33,15 +33,16 @@ public class PlayerInput : CharacterControl
         {
             switch (_weapon.State)
             {
-                case Weapon.WeaponState.Idle:
-                    _player.PickUpWeapon();
-                    break;
                 case Weapon.WeaponState.Holding:
                     _player.Shoot();
                     break;
+                default:
+                    _player.PickUpWeapon();
+                    break;
             }
         }
-        if (Input.GetMouseButtonDown(1))
+        // Press space to drop the weapon
+        if (Input.GetKeyDown(KeyCode.Space))
             _player.DropWeapon();
 
         var inputRay = _camera.Camera.ScreenPointToRay(Input.mousePosition);
