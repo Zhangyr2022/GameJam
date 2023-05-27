@@ -1,64 +1,117 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[DefaultExecutionOrder(-1)]
 public class Player : MonoBehaviour
 {
     public static Player Instance;
-    public const float MaxHealth = 10;
-    public bool IsDead;
 
-    public float walkSpeed = 5f;
-    public float walkResponse = 20f;
-    public float stopResponse = 10f;
-    public float turnResponse = 10f;
+    public float WalkSpeed = 5f;
+    public float WalkResponse = 20f;
+    public float StopResponse = 10f;
+    public float TurnResponse = 10f;
     public Rigidbody rb;
     [Space]
     public Transform rig;
 
-    public float cycleSpeed = 3.5f;
-    public float accelerationTilt = 0.5f;
-    public float accelerationTiltResponse = 3f;
-    public float sway = 2f;
-    public float bob = 0.05f;
-    public float squash = 0.06f;
+    public float CycleSpeed = 3.5f;
+    public float AccelerationTilt = 0.5f;
+    public float AccelerationTiltResponse = 3f;
+    public float Sway = 2f;
+    public float Bob = 0.05f;
+    public float Squash = 0.06f;
 
-    public AudioSource footstepSource;
-    public AudioItem[] footsteps;
+    public AudioSource FootstepSource;
+    public AudioItem[] Footsteps;
+
+    private bool _playedFootstep = true;
+    private int _playedFootstepIndex = -1;
     private int _lastFootstep = -1;
 
     public float CurrentSpeed => rb.velocity.magnitude;
 
-
-
-    public PlayerInput playerInput;
-    public CharacterControl CharacterInput => playerInput;
+    public PlayerInput PlayerInputHandler;
+    public CharacterControl CharacterInput => PlayerInputHandler;
 
     private Vector3 _previousVelocity;
     private float _cycle;
 
-    // private field
+    /// <summary>
+    /// Health
+    /// </summary>
+    public const float MaxHealth = 10;
+    public bool IsDead
+    {
+        get
+        {
+            return _health < 1e-6;
+        }
+    }
     private float _health;
+
+    /// <summary>
+    /// Get world position of mouse
+    /// </summary>
+    private Vector3 _lastMouseWorldPosition;
+
+    public void Damage()
+    {
+        this._health = 0;
+    }
+
+    public void PickUpWeapon()
+    {
+        Weapon.Instance.Pickup(this.transform);
+    }
+    public void DropWeapon()
+    {
+        Weapon.Instance.Drop();
+    }
+    public void Shoot()
+    {
+        // Compute bullet direction
+        Vector3 direction = GetMouseWorldPosition() - this.transform.position;
+
+        Weapon.Instance.ShootBullets(direction);
+    }
+
+
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+    private void Start()
+    {
+        this._health = MaxHealth;
+        this.PlayerInputHandler = PlayerInput.Instance;
+        this.rig = this.transform;
+        this.rb = this.GetComponent<Rigidbody>();
+    }
     private void FixedUpdate()
     {
         var targetRotation = rb.rotation;
         if (CharacterInput.LookDirection.sqrMagnitude > 0f)
             targetRotation = Quaternion.LookRotation(CharacterInput.LookDirection);
-        //rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, turnResponse * Time.fixedDeltaTime);
-        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, turnResponse * Time.fixedDeltaTime));
+        //rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, TurnResponse * Time.fixedDeltaTime);
+        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, TurnResponse * Time.fixedDeltaTime));
 
-        var targetVelocity = CharacterInput.Movement * walkSpeed;
-        var response = targetVelocity.magnitude >= CurrentSpeed ? walkResponse : stopResponse;
+        var targetVelocity = CharacterInput.Movement * WalkSpeed;
+        var response = targetVelocity.magnitude >= CurrentSpeed ? WalkResponse : StopResponse;
         rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, response * Time.fixedDeltaTime);
-
+        Debug.Log(targetVelocity);
         UpdateRig();
     }
+    private void LateUpdate()
+    {
+        _lastMouseWorldPosition = GetMouseWorldPosition();
+    }
 
-    private bool _playedFootstep = true;
-    private int _playedFootstepIndex = -1;
     private void UpdateRig()
     {
-        _cycle += Time.deltaTime * cycleSpeed * CurrentSpeed;
+        _cycle += Time.deltaTime * CycleSpeed * CurrentSpeed;
 
         var acceleration = (rb.velocity - _previousVelocity) / Time.deltaTime;
         var axis = Vector3.Cross(acceleration, Vector3.up);
@@ -67,29 +120,29 @@ public class Player : MonoBehaviour
         rig.rotation = Quaternion.Slerp
         (
             rig.rotation,
-            Quaternion.AngleAxis(accelerationTilt * acceleration.magnitude, axis) * transform.rotation,
-            accelerationTiltResponse * Time.deltaTime
+            Quaternion.AngleAxis(AccelerationTilt * acceleration.magnitude, axis) * transform.rotation,
+            AccelerationTiltResponse * Time.deltaTime
         );
 
-        // sway
-        rig.localRotation *= Quaternion.Euler(0f, 0f, Mathf.Sin(_cycle) * sway * CurrentSpeed / walkSpeed);
+        // Sway
+        rig.localRotation *= Quaternion.Euler(0f, 0f, Mathf.Sin(_cycle) * Sway * CurrentSpeed / WalkSpeed);
 
-        // bob
+        // Bob
         var h = Mathf.Sin(_cycle * 2f);
         if (h < 0f)
         {
-            if (!_playedFootstep && footsteps.Length > 0)
+            if (!_playedFootstep && Footsteps.Length > 0)
             {
                 _playedFootstep = true;
                 var newSoundIndex = _playedFootstepIndex;
-                while (newSoundIndex == _playedFootstepIndex && footsteps.Length > 1)
+                while (newSoundIndex == _playedFootstepIndex && Footsteps.Length > 1)
                 {
-                    newSoundIndex = Random.Range(0, footsteps.Length);
+                    newSoundIndex = Random.Range(0, Footsteps.Length);
                 }
                 newSoundIndex = Mathf.Max(0, newSoundIndex);
-                var sound = footsteps[newSoundIndex];
-                footstepSource.pitch = 1f + Random.Range(-sound.pitchVariance / 2f, sound.pitchVariance / 2f);
-                footstepSource.PlayOneShot(sound.clip, sound.volume);
+                var sound = Footsteps[newSoundIndex];
+                FootstepSource.pitch = 1f + Random.Range(-sound.pitchVariance / 2f, sound.pitchVariance / 2f);
+                FootstepSource.PlayOneShot(sound.clip, sound.volume);
 
                 _playedFootstepIndex = newSoundIndex;
             }
@@ -98,10 +151,10 @@ public class Player : MonoBehaviour
         {
             _playedFootstep = false;
         }
-        rig.localPosition = Vector3.up * (Mathf.Max(h, 0f) * bob * CurrentSpeed) / walkSpeed;
+        rig.localPosition = Vector3.up * (Mathf.Max(h, 0f) * Bob * CurrentSpeed) / WalkSpeed;
 
-        // squash
-        var s = Mathf.Sin(_cycle * 2f) * CurrentSpeed / walkSpeed * squash;
+        // Squash
+        var s = Mathf.Sin(_cycle * 2f) * CurrentSpeed / WalkSpeed * Squash;
         SetSquash(s);
 
         _previousVelocity = rb.velocity;
@@ -111,12 +164,9 @@ public class Player : MonoBehaviour
     {
         rig.localScale = new Vector3(1f / (1f + s), 1f + s, 1f / (1f + s));
     }
+
     // Start is called before the first frame update
-    void Start()
-    {
-        this.IsDead = false;
-        this._health = MaxHealth;
-    }
+
     private Vector3 GetMouseWorldPosition()
     {
         var ray = PlayerCamera.Instance.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
@@ -127,25 +177,5 @@ public class Player : MonoBehaviour
         }
 
         return default;
-    }
-    public void Damage()
-    {
-        this._health = 0;
-        this.IsDead = true;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void PickUpWeapon()
-    {
-
-    }
-    public void DropWeapon()
-    {
-
     }
 }

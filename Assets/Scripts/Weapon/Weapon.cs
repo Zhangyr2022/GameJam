@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -29,6 +30,8 @@ public class Weapon : MonoBehaviour
     public AudioSource SpinningSource;
     public Vector2 SpinningPitch = new Vector2(0.8f, 1f);
 
+
+
     public enum WeaponState
     {
         Idle,
@@ -37,8 +40,14 @@ public class Weapon : MonoBehaviour
         Throwing,
         Stuck,
     }
-
     public WeaponState State = WeaponState.Idle;
+
+    public enum WeaponMode
+    {
+        Normal,
+        Strengthened
+    }
+    public WeaponMode Mode = WeaponMode.Normal;
 
     public GameObject CurrentWeaponTarget;
     private float _currentThrowSpeed;
@@ -46,11 +55,14 @@ public class Weapon : MonoBehaviour
 
     private float lastBloodTime = -100f;
 
+    public const float ShootBulletsInterval = 0.5f;
+    private float _lastShootTime;
     private void OnEnable()
     {
         Instance = this;
+        this.Blood = GameObject.Find("Particals");
+        this.WeaponBody = this.GetComponent<Rigidbody>();
         SetBloodActive(false);
-
     }
 
     public void SetBloodActive(bool active)
@@ -257,6 +269,20 @@ public class Weapon : MonoBehaviour
             yield return null;
             var angle = Mathf.Sin(tt * WobbleSpeed) * WobbleCurve.Evaluate(tt) * WobbleStrength;
             WobbleRoot.localRotation = Quaternion.Euler(angle, 0f, 0f);
+        }
+    }
+
+    public void ShootBullets(Vector3 direction)
+    {
+        if (Time.time - _lastShootTime > ShootBulletsInterval)
+        {
+            this._lastShootTime = Time.time;
+            Bullet.BulletMode bulletMode = Bullet.BulletMode.Normal;
+            if (this.Mode == WeaponMode.Strengthened)
+            {
+                bulletMode = Bullet.BulletMode.Strengthened;
+            }
+            BulletManager.Instance.CreateBullet(this.transform.position, direction, bulletMode);
         }
     }
 }

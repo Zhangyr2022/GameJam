@@ -1,5 +1,7 @@
 using UnityEngine;
 
+[DefaultExecutionOrder(1)]
+
 public class PlayerCamera : MonoBehaviour
 {
     public static PlayerCamera Instance;
@@ -26,8 +28,8 @@ public class PlayerCamera : MonoBehaviour
 
     private void Start()
     {
-        _initialOffset = transform.position - Player.Instance.transform.position;
         Camera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+        _initialOffset = transform.position - _player.transform.position;
     }
 
     private void FixedUpdate()
@@ -36,7 +38,7 @@ public class PlayerCamera : MonoBehaviour
         {
             var playerTransform = _player.transform;
             var playerPosition = playerTransform.position;
-            var targetPosition = playerPosition + _player.playerInput.LookDirection * LookAhead;
+            var targetPosition = playerPosition + _player.PlayerInputHandler.LookDirection * LookAhead;
             targetPosition.y = 0f;
 
             transform.position =
