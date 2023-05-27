@@ -8,13 +8,21 @@ public class EnemyManager : MonoBehaviour
 
     public GameObject EnemyInstance;
 
-    public int MaxEnemyCount = 3;
+    public int WaveCount = 9;
 
-    public float GenerationInterval = 1;
+    public float OccupyR = 0.4f;
 
-    private float _lastGen = 0;
+    // public int MaxEnemyCount = 3;
+
+    // public float GenerationInterval = 1;
+
+    public int CurWave = 0;
+
+    private int _toGenerateCount = 0;
 
     private Dictionary<string, GameObject> _enemies = new Dictionary<string, GameObject>();
+
+    private Dictionary<Vector2Int, int> _occupied = new Dictionary<Vector2Int, int>();
 
     public void DoAOEDamage(Vector3 center, float r, float damage)
     {
@@ -32,25 +40,67 @@ public class EnemyManager : MonoBehaviour
         if (_enemies.ContainsKey(enemy.name))
         {
             _enemies.Remove(enemy.name);
-
+            if (_enemies.Count == 0)
+                NextWave();
         }
+    }
+
+    private void NextWave()
+    {
+        if (CurWave == WaveCount)
+            return;
+        CurWave++;
+        _toGenerateCount = CurWave;
     }
 
     private void GenerateEnemy()
     {
-        List<Vector2Int> positions = GridManager.Instance.GetEvilChunks();
+        List<Vector2Int> positions = GridManager.Instance.GetEvilChunks(_occupied);
 
         if (positions.Count == 0)
             return;
 
-        int rand = Random.Range(0, positions.Count);
+        Dictionary<Vector2Int, bool> used = new Dictionary<Vector2Int, bool>();
 
-        Vector2Int pos = positions[rand];
+        int maxTry = _toGenerateCount * 5;
+        for (int i = 0; i < maxTry; i++)
+        {
+            int rand = Random.Range(0, positions.Count);
+            Vector2Int pos = positions[rand];
+            if (used.ContainsKey(pos))
+                continue;
+            used.Add(pos, true);
 
-        GameObject enemy = GameObject.Instantiate(EnemyInstance, new Vector3(pos.x + Random.Range(0.2f, 0.8f), 2.0f, pos.y + Random.Range(0.2f, 0.8f)), Quaternion.identity);
-        enemy.name = "Enemy" + _enemies.Count.ToString();
+            GameObject enemy = GameObject.Instantiate(EnemyInstance, new Vector3(pos.x + 0.5f, 0.9f, pos.y + 0.5f), Quaternion.identity);
+            enemy.name = "Enemy" + _enemies.Count.ToString();
+            _enemies.Add(enemy.name, enemy);
+            _toGenerateCount--;
 
-        _enemies.Add(enemy.name, enemy);
+            if (_toGenerateCount == 0)
+                break;
+        }
+    }
+
+    private void MarkAsOccupied(Vector3 pos)
+    {
+        Vector2Int p1 = new Vector2Int((int)(pos.x - OccupyR), (int)(pos.z - OccupyR));
+        Vector2Int p2 = new Vector2Int((int)(pos.x - OccupyR), (int)(pos.z + OccupyR));
+        Vector2Int p3 = new Vector2Int((int)(pos.x + OccupyR), (int)(pos.z - OccupyR));
+        Vector2Int p4 = new Vector2Int((int)(pos.x + OccupyR), (int)(pos.z + OccupyR));
+
+        _occupied.Add(p1, 1);
+        _occupied.Add(p2, 1);
+        _occupied.Add(p3, 1);
+        _occupied.Add(p4, 1);
+    }
+
+    private void GetOccupied()
+    {
+        _occupied.Clear();
+        foreach (var enemy in _enemies)
+            MarkAsOccupied(enemy.Value.transform.position);
+
+        MarkAsOccupied(Player.Instance.transform.position);
     }
 
     private void Awake()
@@ -61,17 +111,17 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _lastGen = Time.time;
+        CurWave = 0;
+        NextWave();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float curTime = Time.time;
-        if (_enemies.Count < MaxEnemyCount && curTime - _lastGen >= GenerationInterval)
+        if (_toGenerateCount > 0)
         {
+            GetOccupied();
             GenerateEnemy();
-            _lastGen = curTime;
         }
     }
 }
