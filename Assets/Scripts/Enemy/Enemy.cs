@@ -42,6 +42,7 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         EnemyManager.Instance.RemoveEnemy(gameObject);
+        GameObject.Destroy(gameObject);
     }
 
     // Start is called before the first frame update
