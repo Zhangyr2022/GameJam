@@ -88,10 +88,10 @@ public class EnemyManager : MonoBehaviour
         Vector2Int p3 = new Vector2Int((int)(pos.x + OccupyR), (int)(pos.z - OccupyR));
         Vector2Int p4 = new Vector2Int((int)(pos.x + OccupyR), (int)(pos.z + OccupyR));
 
-        _occupied.Add(p1, 1);
-        _occupied.Add(p2, 1);
-        _occupied.Add(p3, 1);
-        _occupied.Add(p4, 1);
+        _occupied.TryAdd(p1, 1);
+        _occupied.TryAdd(p2, 1);
+        _occupied.TryAdd(p3, 1);
+        _occupied.TryAdd(p4, 1);
     }
 
     private void GetOccupied()

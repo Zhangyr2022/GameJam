@@ -7,6 +7,10 @@ public class Player : MonoBehaviour
     public static Player Instance;
 
 
+    public void Damage()
+    {
+        // this._health = 0;
+    }
     private void Awake()
     {
         Instance = this;

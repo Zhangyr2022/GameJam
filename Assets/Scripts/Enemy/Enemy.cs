@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
     public int DamageToChunk = 1;
     public float GrowSpeed = 1.0f;
 
+    // public GameObject Remain;
+
     private enum State
     {
         Grow,
@@ -42,6 +44,8 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         EnemyManager.Instance.RemoveEnemy(gameObject);
+        GridManager.Instance.CleanChunk(_currentPos);
+
         GameObject.Destroy(gameObject);
     }
 
