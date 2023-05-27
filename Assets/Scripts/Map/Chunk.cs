@@ -35,7 +35,7 @@ public class Chunk : MonoBehaviour
         {
             Evil = false;
             _hp = MaxHP;
-            _mat.color = CorruptedColor;
+            _mat.color = HealthyColor;
         }
     }
 

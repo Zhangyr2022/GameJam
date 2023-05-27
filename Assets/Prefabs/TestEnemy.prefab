@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &848564032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 848564033}
+  m_Layer: 6
+  m_Name: gun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &848564033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 848564032}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.338}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 605350188211823990}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &605350186465638792
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,6 +193,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 605350187885206904}
+  - {fileID: 848564033}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -180,6 +212,12 @@ MonoBehaviour:
   MaxHP: 4
   DamageToChunk: 1
   GrowSpeed: 1
+  ShootStart: {fileID: 848564033}
+  Bullet: {fileID: 7581666762792152480, guid: 3a29b8f3a0ad37643adc665c892b7171, type: 3}
+  ShootInterval: 2
+  BulletSpeed: 3
+  Remain: {fileID: 8664090271601503051, guid: 79f09097c16f5b54292679f840617630, type: 3}
+  RemainDuration: 3
 --- !u!114 &605350188211823984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,7 +232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Movement: {x: 0, y: 0, z: 0}
   LookDirection: {x: 0, y: 0, z: 0}
-  pursueDistance: 3
+  pursueDistance: 4
   circleSpeed: 1
   knockbackRecoverySpeed: 3
   knockbackForce: 5
