@@ -38,11 +38,11 @@ public class Chunk : MonoBehaviour
     void Start()
     {
         _hp = MaxHP;
-        _mat = gameObject.GetComponent<MeshRenderer>().material;
+        _mat = gameObject.GetComponent<MeshRenderer>().materials[1];
         _mat.color = Evil ? Color.red : Color.green;
 
         Vector3 chunkPos = transform.position;
-        Vector2Int pos = new Vector2Int((int)(chunkPos.x - 0.5), (int)(chunkPos.z - 0.5));
+        Vector2Int pos = new Vector2Int(Mathf.RoundToInt(chunkPos.x - 0.5f), Mathf.RoundToInt(chunkPos.z - 0.5f));
         GridManager.Instance.AddChunk(pos, this);
     }
 

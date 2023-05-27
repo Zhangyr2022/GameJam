@@ -47,7 +47,7 @@ public class EnemyManager : MonoBehaviour
 
         Vector2Int pos = positions[rand];
 
-        GameObject enemy = GameObject.Instantiate(EnemyInstance, new Vector3(pos.x + Random.Range(0.2f, 0.8f), 2.0f, pos.y + Random.Range(0.2f, 0.8f)), Quaternion.identity);
+        GameObject enemy = GameObject.Instantiate(EnemyInstance, new Vector3(pos.x + 0.5f, 0.9f, pos.y + 0.5f), Quaternion.identity);
         enemy.name = "Enemy" + _enemies.Count.ToString();
 
         _enemies.Add(enemy.name, enemy);
