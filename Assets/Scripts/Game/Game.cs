@@ -79,7 +79,7 @@ public class Game : MonoBehaviour
             _endingView.SetActive(true);
             string endingType = this._gameState == GameState.HappyEnding ? "Happy" : "Bad";
             this._endingHint.text = $"{endingType} Ending!";
-            this._endingViewScore.text = $"ÄúµÄ·ÖÊý£º {_score} ·Ö";
+            this._endingViewScore.text = $"ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ {_score} ï¿½ï¿½";
         }
     }
 }

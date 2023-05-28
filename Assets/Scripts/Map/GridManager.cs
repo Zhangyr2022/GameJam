@@ -35,7 +35,16 @@ public class GridManager : MonoBehaviour
     {
         _evilCnt += cnt;
         float frac = 1.0f * _evilCnt / _grid.Count;
+
+        if (_evilCnt == 0 || (frac <= 0.4 && EnemyManager.Instance.CurWave >= 8))
+            Win();
+
         ChangeSkybox(frac);
+    }
+
+    public float GetEvilRatio()
+    {
+        return _evilCnt * 1.0f / _grid.Count;
     }
 
     public List<Vector2Int> GetValidChunks(bool evil, Dictionary<Vector2Int, int> occupied)
@@ -49,6 +58,12 @@ public class GridManager : MonoBehaviour
         }
 
         return ret;
+    }
+
+    private void Win()
+    {
+        EnemyManager.Instance.StopAll();
+        Game.Instance.ChangeGameState(Game.GameState.HappyEnding);
     }
 
     private void ChangeSkybox(float factor)

@@ -52,6 +52,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        Game.Instance.AddScore(1);
         EnemyManager.Instance.RemoveEnemy(gameObject);
         GridManager.Instance.CleanChunk(_currentPos);
 
