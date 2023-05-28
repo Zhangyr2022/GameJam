@@ -49,7 +49,7 @@ public class Game : MonoBehaviour
     {
         _endingView = GameObject.Find("Canvas/EndingView");
         _endingHint = GameObject.Find("Canvas/EndingView/Hint").GetComponent<TMP_Text>();
-        _endingViewScore = GameObject.Find("Canvas/EndingView/Ending").GetComponent<TMP_Text>();
+        _endingViewScore = GameObject.Find("Canvas/EndingView/Score").GetComponent<TMP_Text>();
         _restartButton = GameObject.Find("Canvas/EndingView/RestartButton").GetComponent<Button>();
         _restartButton.onClick.AddListener(() =>
         {
