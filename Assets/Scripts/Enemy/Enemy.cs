@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
     public int DamageToChunk = 1;
     public float GrowSpeed = 1.0f;
 
+    public GameObject Particle;
+
     public Transform ShootStart;
     public GameObject Bullet;
 
@@ -49,7 +51,7 @@ public class Enemy : MonoBehaviour
         _hp = Mathf.Max(_hp - damage, 0);
         if (Mathf.Approximately(_hp, 0))
         {
-            Die(); 
+            Die();
         }
     }
 
@@ -68,6 +70,7 @@ public class Enemy : MonoBehaviour
         // Play dead audio
         this._deadAudio.PlayOn(_audioSource);
 
+        GameObject.Instantiate(Particle, transform.position, Quaternion.identity);
         GameObject remain = GameObject.Instantiate(Remain, transform.position, Quaternion.identity);
         GameObject.Destroy(gameObject);
         GameObject.Destroy(remain, RemainDuration);
