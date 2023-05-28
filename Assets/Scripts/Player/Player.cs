@@ -140,6 +140,10 @@ public class Player : MonoBehaviour
 
             UpdateRig();
         }
+        else
+        {
+            Game.Instance.ChangeGameState(Game.GameState.BadEnding);
+        }
     }
     private void LateUpdate()
     {
