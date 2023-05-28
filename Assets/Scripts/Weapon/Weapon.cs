@@ -170,7 +170,7 @@ public class Weapon : MonoBehaviour
         }
         State = WeaponState.Holding;
 
-        transform.SetParent(holder);
+        transform.SetParent(FindTransformInChildren(holder, "WeaponContainer")[0]);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     }
@@ -267,6 +267,7 @@ public class Weapon : MonoBehaviour
                 State = WeaponState.Stuck;
                 transform.rotation =
                     Quaternion.LookRotation(contact.normal, Vector3.up);
+                transform.eulerAngles = Vector3.zero;
                 transform.position =
                     contact.point + contact.normal * (WobbleRoot.position - transform.position).magnitude;
                 SpinningSource.Stop();
@@ -318,5 +319,30 @@ public class Weapon : MonoBehaviour
     public void AOEShoot()
     {
         EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
+    }
+
+
+    private List<Transform> FindTransformInChildren(Transform parent, string targetName)
+    {
+        List<Transform> foundTransforms = new List<Transform>();
+
+        int childCount = parent.childCount;
+
+        for (int i = 0; i < childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+
+            // 检查当前子物体的名称是否匹配目标名称
+            if (child.name == targetName)
+            {
+                // 找到了符合条件的Transform，添加到列表中
+                foundTransforms.Add(child);
+            }
+
+            // 继续递归查找子物体的子物体，并将结果添加到列表中
+            foundTransforms.AddRange(FindTransformInChildren(child, targetName));
+        }
+
+        return foundTransforms;
     }
 }

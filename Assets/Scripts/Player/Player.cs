@@ -5,8 +5,6 @@ using UnityEngine;
 [DefaultExecutionOrder(-1)]
 public class Player : MonoBehaviour
 {
-
-
     public static Player Instance;
 
     public float WalkSpeed = 5f;
