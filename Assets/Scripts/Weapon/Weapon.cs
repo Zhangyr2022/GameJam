@@ -299,7 +299,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public void ShootBullets(Vector3 direction)
+    public void ShootBullets(Vector3 direction, GameObject target = null)
     {
         if (Time.time - _lastShootTime > ShootBulletsInterval)
         {
@@ -309,7 +309,7 @@ public class Weapon : MonoBehaviour
             {
                 bulletMode = Bullet.BulletMode.Strengthened;
             }
-            BulletManager.Instance.CreateBullet(this.transform.position, direction, bulletMode);
+            BulletManager.Instance.CreateBullet(this.transform.position, direction, bulletMode, target);
         }
     }
     /// <summary>

@@ -5,6 +5,8 @@ using UnityEngine;
 [DefaultExecutionOrder(-1)]
 public class Player : MonoBehaviour
 {
+
+
     public static Player Instance;
 
     public float WalkSpeed = 5f;
@@ -55,8 +57,10 @@ public class Player : MonoBehaviour
     /// </summary>
     private Vector3 _lastMouseWorldPosition;
 
+    private Animator _animationController;
     public void Damage()
     {
+        SetPlayerAnimation(PlayerState.Dead);
         this._health = 0;
     }
 
@@ -70,6 +74,8 @@ public class Player : MonoBehaviour
     }
     public void Shoot()
     {
+        SetPlayerAnimation(PlayerState.Attack);
+
         // Compute bullet direction
         Vector3 direction = GetMouseWorldPosition() - this.transform.position;
 
@@ -80,7 +86,7 @@ public class Player : MonoBehaviour
             if (mouseRaycastObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 // Shoot
-                Weapon.Instance.ShootBullets(direction);
+                Weapon.Instance.ShootBullets(direction, mouseRaycastObject);
             }
             else
             {
@@ -98,6 +104,7 @@ public class Player : MonoBehaviour
     }
     private void Start()
     {
+        this._animationController = this.GetComponent<Animator>();
         this._health = MaxHealth;
         this.PlayerInputHandler = PlayerInput.Instance;
         this.rig = this.transform.Find("Rig");
@@ -110,17 +117,29 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        var targetRotation = rb.rotation;
-        if (CharacterInput.LookDirection.sqrMagnitude > 0f)
-            targetRotation = Quaternion.LookRotation(CharacterInput.LookDirection);
-        //rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, TurnResponse * Time.fixedDeltaTime);
-        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, TurnResponse * Time.fixedDeltaTime));
+        if (!IsDead)
+        {
+            var targetRotation = rb.rotation;
+            if (CharacterInput.LookDirection.sqrMagnitude > 0f)
+                targetRotation = Quaternion.LookRotation(CharacterInput.LookDirection);
+            //rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, TurnResponse * Time.fixedDeltaTime);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, TurnResponse * Time.fixedDeltaTime));
 
-        var targetVelocity = CharacterInput.Movement * WalkSpeed;
-        var response = targetVelocity.magnitude >= CurrentSpeed ? WalkResponse : StopResponse;
-        rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, response * Time.fixedDeltaTime);
-        //Debug.Log(targetVelocity);
-        UpdateRig();
+            var targetVelocity = CharacterInput.Movement * WalkSpeed;
+            var response = targetVelocity.magnitude >= CurrentSpeed ? WalkResponse : StopResponse;
+            rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, response * Time.fixedDeltaTime);
+            //Debug.Log(targetVelocity);
+            if (rb.velocity.magnitude > 0.1f)
+            {
+                SetPlayerAnimation(PlayerState.Run);
+            }
+            else
+            {
+                SetPlayerAnimation(PlayerState.Idle);
+            }
+
+            UpdateRig();
+        }
     }
     private void LateUpdate()
     {
@@ -207,5 +226,17 @@ public class Player : MonoBehaviour
         }
 
         return null;
+    }
+
+    public enum PlayerState
+    {
+        Idle,
+        Run,
+        Attack,
+        Dead
+    };
+    public void SetPlayerAnimation(PlayerState playerState)
+    {
+        _animationController.SetInteger("State", (int)playerState);
     }
 }
