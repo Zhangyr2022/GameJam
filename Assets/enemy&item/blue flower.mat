@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Dynamic
-  m_Shader: {fileID: 4800000, guid: d7d6d2789e5234c47b07b28afeb5e9e0, type: 3}
+  m_Name: blue flower
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 93943d3d981b3418fa14d45559e95277, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -62,44 +62,19 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Factor: 0.15180266
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0
     - _GlossyReflections: 1
-    - _HorizonLineContribution: 0.25
-    - _HorizonLineContribution1: 0.3
-    - _HorizonLineExponent: 4
-    - _HorizonLineExponent1: 5.75
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _SkyGradientExponent: 2.5
-    - _SkyGradientExponent1: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SunDiscExponent: 125000
-    - _SunDiscExponent1: 500000
-    - _SunDiscMultiplier: 25
-    - _SunDiscMultiplier1: 100000
-    - _SunHaloContribution: 0.75
-    - _SunHaloContribution1: 0.5
-    - _SunHaloExponent: 125
-    - _SunHaloExponent1: 500
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HorizonLineColor: {r: 0.9044118, g: 0.8872592, b: 0.7913603, a: 1}
-    - _HorizonLineColor1: {r: 1, g: 1, b: 1, a: 1}
-    - _SkyGradientBottom: {r: 0.76470596, g: 0.8156863, b: 0.8509805, a: 1}
-    - _SkyGradientBottom1: {r: 0.46666667, g: 0.84705883, b: 0.8784314, a: 1}
-    - _SkyGradientTop: {r: 0.17254895, g: 0.5686274, b: 0.6941177, a: 1}
-    - _SkyGradientTop1: {r: 0, g: 0.5647059, b: 0.8117647, a: 1}
-    - _SunDiscColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SunDiscColor1: {r: 1, g: 1, b: 1, a: 1}
-    - _SunHaloColor: {r: 0.8970588, g: 0.7760561, b: 0.666198, a: 1}
-    - _SunHaloColor1: {r: 0.9098039, g: 0.8666667, b: 0.77254903, a: 1}
   m_BuildTextureStacks: []

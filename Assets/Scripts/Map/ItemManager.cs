@@ -37,7 +37,7 @@ public class ItemManager : MonoBehaviour
         int rand = Random.Range(0, positions.Count);
         Vector2Int pos = positions[rand];
 
-        GameObject item = GameObject.Instantiate(ItemInstance, new Vector3(pos.x + 0.5f, 1.0f, pos.y + 0.5f), Quaternion.identity);
+        GameObject item = GameObject.Instantiate(ItemInstance, new Vector3(pos.x + 0.5f, 0.7f, pos.y + 0.5f), Quaternion.identity);
         item.name = "Item" + _id++;
 
         _items.Add(item.name, item);
