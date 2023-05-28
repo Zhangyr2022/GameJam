@@ -8,6 +8,16 @@ public class Enemy : MonoBehaviour
     public int DamageToChunk = 1;
     public float GrowSpeed = 1.0f;
 
+    public Transform ShootStart;
+    public GameObject Bullet;
+
+    public float ShootInterval;
+
+    public float BulletSpeed;
+
+    public GameObject Remain;
+    public float RemainDuration;
+
     private enum State
     {
         Grow,
@@ -21,8 +31,9 @@ public class Enemy : MonoBehaviour
     private Vector2Int _currentPos;
 
     private EnemyMotor _motor;
-
     private float _size;
+
+    private float _lastShootTime;
 
     public void DoDamage(float damage)
     {
@@ -42,7 +53,17 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         EnemyManager.Instance.RemoveEnemy(gameObject);
+        GridManager.Instance.CleanChunk(_currentPos);
+
+        GameObject remain = GameObject.Instantiate(Remain, transform.position, Quaternion.identity);
         GameObject.Destroy(gameObject);
+        GameObject.Destroy(remain, RemainDuration);
+    }
+
+    private void Shoot()
+    {
+        GameObject bullet = GameObject.Instantiate(Bullet, ShootStart.position, Quaternion.identity);
+        bullet.GetComponent<Rigidbody>().velocity = (Player.Instance.transform.position - transform.position).normalized * BulletSpeed;
     }
 
     // Start is called before the first frame update
@@ -76,7 +97,16 @@ public class Enemy : MonoBehaviour
             if (Mathf.Approximately(_size, 1))
             {
                 _state = State.Alive;
+                _lastShootTime = Time.time;
                 _motor.CanMove = true;
+            }
+        }
+        else if (_state == State.Alive)
+        {
+            if (Time.time - _lastShootTime >= ShootInterval)
+            {
+                _lastShootTime = Time.time;
+                Shoot();
             }
         }
     }

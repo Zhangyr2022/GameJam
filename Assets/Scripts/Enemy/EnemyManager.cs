@@ -26,13 +26,18 @@ public class EnemyManager : MonoBehaviour
 
     public void DoAOEDamage(Vector3 center, float r, float damage)
     {
+        List<GameObject> affected = new List<GameObject>();
         foreach (var kv in _enemies)
         {
             GameObject enemy = kv.Value;
             Vector3 enemyPos = enemy.transform.position;
             if (Vector3.Distance(center, enemyPos) <= r)
-                enemy.GetComponent<Enemy>().DoDamage(damage);
+                affected.Add(enemy);
+
         }
+
+        foreach (var enemy in affected)
+            enemy.GetComponent<Enemy>().DoDamage(damage);
     }
 
     public void RemoveEnemy(GameObject enemy)
@@ -88,10 +93,10 @@ public class EnemyManager : MonoBehaviour
         Vector2Int p3 = new Vector2Int((int)(pos.x + OccupyR), (int)(pos.z - OccupyR));
         Vector2Int p4 = new Vector2Int((int)(pos.x + OccupyR), (int)(pos.z + OccupyR));
 
-        _occupied.Add(p1, 1);
-        _occupied.Add(p2, 1);
-        _occupied.Add(p3, 1);
-        _occupied.Add(p4, 1);
+        _occupied.TryAdd(p1, 1);
+        _occupied.TryAdd(p2, 1);
+        _occupied.TryAdd(p3, 1);
+        _occupied.TryAdd(p4, 1);
     }
 
     private void GetOccupied()
@@ -122,6 +127,12 @@ public class EnemyManager : MonoBehaviour
         {
             GetOccupied();
             GenerateEnemy();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("BOOM");
+            DoAOEDamage(Vector3.zero, 100, 100);
         }
     }
 }
