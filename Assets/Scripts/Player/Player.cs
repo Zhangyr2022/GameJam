@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
         var targetVelocity = CharacterInput.Movement * WalkSpeed;
         var response = targetVelocity.magnitude >= CurrentSpeed ? WalkResponse : StopResponse;
         rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, response * Time.fixedDeltaTime);
-        Debug.Log(targetVelocity);
+        //Debug.Log(targetVelocity);
         UpdateRig();
     }
     private void LateUpdate()

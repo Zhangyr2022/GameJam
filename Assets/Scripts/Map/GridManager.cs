@@ -25,18 +25,19 @@ public class GridManager : MonoBehaviour
             _grid[pos].Recover();
     }
 
-    public List<Vector2Int> GetEvilChunks(Dictionary<Vector2Int, int> occupied)
+    public List<Vector2Int> GetValidChunks(bool evil, Dictionary<Vector2Int, int> occupied)
     {
         var ret = new List<Vector2Int>();
 
         foreach (var kv in _grid)
         {
-            if (kv.Value.Evil && !occupied.ContainsKey(kv.Key))
+            if ((kv.Value.Evil == evil) && !occupied.ContainsKey(kv.Key))
                 ret.Add(kv.Key);
         }
 
         return ret;
     }
+
 
     private void Awake()
     {

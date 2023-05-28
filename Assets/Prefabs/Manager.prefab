@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7379505060702274904}
   - component: {fileID: 7379505060702274905}
   - component: {fileID: 7379505060702274906}
+  - component: {fileID: 1760561312}
+  - component: {fileID: 1760561313}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -61,3 +63,30 @@ MonoBehaviour:
   WaveCount: 9
   OccupyR: 0.4
   CurWave: 0
+--- !u!114 &1760561312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7379505060702274907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc0fa10e78b89a84fb09fa8e8d1f0475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1760561313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7379505060702274907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3093334bffa14814cb0fba4829906667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemInstance: {fileID: 6748053317782163574, guid: 8baf1d0283cbacc40a057687affef4d4, type: 3}
+  MaxItemCount: 3
+  GenerationInterval: 1

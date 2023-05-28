@@ -31,12 +31,11 @@ public class Chunk : MonoBehaviour
 
     public void Recover()
     {
+        _hp = MaxHP;
+        _mat.color = HealthyColor;
+
         if (Evil)
-        {
             Evil = false;
-            _hp = MaxHP;
-            _mat.color = HealthyColor;
-        }
     }
 
     // Start is called before the first frame update

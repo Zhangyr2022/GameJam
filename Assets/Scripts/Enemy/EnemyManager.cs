@@ -18,6 +18,8 @@ public class EnemyManager : MonoBehaviour
 
     public int CurWave = 0;
 
+    private int _id;
+
     private int _toGenerateCount = 0;
 
     private Dictionary<string, GameObject> _enemies = new Dictionary<string, GameObject>();
@@ -60,7 +62,7 @@ public class EnemyManager : MonoBehaviour
 
     private void GenerateEnemy()
     {
-        List<Vector2Int> positions = GridManager.Instance.GetEvilChunks(_occupied);
+        List<Vector2Int> positions = GridManager.Instance.GetValidChunks(true, _occupied);
 
         if (positions.Count == 0)
             return;
@@ -78,7 +80,7 @@ public class EnemyManager : MonoBehaviour
 
             GameObject enemy = GameObject.Instantiate(EnemyInstance, new Vector3(pos.x + 0.5f, 0.9f, pos.y + 0.5f), Quaternion.identity);
             enemy.layer = LayerMask.NameToLayer("Enemy");
-            enemy.name = "Enemy" + _enemies.Count.ToString();
+            enemy.name = "Enemy" + _id++;
             _enemies.Add(enemy.name, enemy);
             _toGenerateCount--;
 

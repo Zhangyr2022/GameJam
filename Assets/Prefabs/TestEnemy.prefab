@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ae0b60901ffaee419f39f37b9e71b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 4
+  MaxHP: 1
   DamageToChunk: 1
   GrowSpeed: 1
   ShootStart: {fileID: 848564033}
