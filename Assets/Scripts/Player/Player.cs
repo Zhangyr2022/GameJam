@@ -25,6 +25,12 @@ public class Player : MonoBehaviour
     public AudioSource FootstepSource;
     public AudioItem[] Footsteps;
 
+    public AudioSource ReviveSource;
+    public AudioItem ReviveAudio;
+
+    public AudioSource DeadSource;
+    public AudioItem DeadAudio;
+
     private bool _playedFootstep = true;
     private int _playedFootstepIndex = -1;
     private int _lastFootstep = -1;
@@ -58,8 +64,11 @@ public class Player : MonoBehaviour
     private Animator _animationController;
     public void Damage()
     {
+        if (!IsDead)
+            DeadAudio.PlayOn(DeadSource);
         SetPlayerAnimation(PlayerState.Dead);
         this._health = 0;
+
     }
 
     public void PickUpWeapon()
@@ -93,7 +102,12 @@ public class Player : MonoBehaviour
             }
         }
     }
-
+    public void Revive()
+    {
+        _health = MaxHealth;
+        // Play sound
+        ReviveAudio.PlayOn(ReviveSource);
+    }
 
 
     private void Awake()
@@ -112,6 +126,12 @@ public class Player : MonoBehaviour
         List<AudioItem> footstepsSoundList = new();
         footstepsSoundList.Add(new AudioItem(Resources.Load<AudioClip>("Audio/FootStep")));
         this.Footsteps = footstepsSoundList.ToArray();
+
+        this.ReviveSource = FootstepSource;
+        this.ReviveAudio = new AudioItem(Resources.Load<AudioClip>("Audio/revive"));
+
+        this.DeadSource = FootstepSource;
+        this.DeadAudio = new AudioItem(Resources.Load<AudioClip>("Audio/moan"));
     }
     private void FixedUpdate()
     {

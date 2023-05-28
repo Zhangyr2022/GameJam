@@ -60,6 +60,12 @@ public class Weapon : MonoBehaviour
 
     public const float ShootBulletsInterval = 0.5f;
     private float _lastShootTime;
+
+    private float _lastExplodeTime = 0.1f;
+    public const float ExplosionInterval = 10;
+    public const float ExplosionRange = 1.5f;
+    public const float ExplosionDamage = 10;
+
     private void OnEnable()
     {
         Instance = this;
@@ -99,6 +105,7 @@ public class Weapon : MonoBehaviour
         //        p.Stop();
         //}
     }
+
     private void FixedUpdate()
     {
         if (Time.time - lastBloodTime > BloodDuration)
@@ -113,6 +120,12 @@ public class Weapon : MonoBehaviour
             transform.RotateAround(RotateAround.position, Vector3.up, MaxSpinSpeed * Time.fixedDeltaTime);
             transform.position += _throwDirection * (_currentThrowSpeed * Time.fixedDeltaTime);
             WeaponBody.position = transform.position;
+        }
+
+        if (Time.time - this._lastExplodeTime > ExplosionInterval)
+        {
+            Explode();
+            this._lastExplodeTime = Time.time;
         }
     }
 
@@ -321,6 +334,15 @@ public class Weapon : MonoBehaviour
         EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
     }
 
+    private void Explode()
+    {
+        EnemyManager.Instance.DoAOEDamage(this.transform.position, ExplosionRange, ExplosionDamage);
+        // Check if the player is in the range of explosion
+        if (Vector3.Distance(Player.Instance.transform.position, this.transform.position) < ExplosionRange)
+        {
+            Player.Instance.Damage();
+        }
+    }
 
     private List<Transform> FindTransformInChildren(Transform parent, string targetName)
     {

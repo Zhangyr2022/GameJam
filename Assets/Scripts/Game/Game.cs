@@ -23,6 +23,7 @@ public class Game : MonoBehaviour
     private TMP_Text _endingHint;
     private TMP_Text _endingViewScore;
     private Button _restartButton;
+    private Player _player => Player.Instance;
 
 
     private GameState _gameState;
@@ -54,6 +55,7 @@ public class Game : MonoBehaviour
         _restartButton.onClick.AddListener(() =>
         {
             ChangeGameState(GameState.Play);
+            _player.Revive();
         });
 
         _endingView.SetActive(false);
@@ -68,6 +70,8 @@ public class Game : MonoBehaviour
     {
         if (_gameState == GameState.Play)
         {
+            // Do not display the restart view
+            _endingView.SetActive(false);
         }
         else if (_gameState == GameState.Stop)
         {
@@ -79,7 +83,7 @@ public class Game : MonoBehaviour
             _endingView.SetActive(true);
             string endingType = this._gameState == GameState.HappyEnding ? "Happy" : "Bad";
             this._endingHint.text = $"{endingType} Ending!";
-            this._endingViewScore.text = $"���ķ����� {_score} ��";
+            this._endingViewScore.text = $"Your score: {_score}";
         }
     }
 }
