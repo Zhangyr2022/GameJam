@@ -74,7 +74,9 @@ public class Weapon : MonoBehaviour
     private GameObject _energyObject;
     private AudioItem _explodeAudio;
 
-    private ParticleSystem _cycleParticleSystem;
+    public ParticleSystem CycleParticleSystem;
+    public ParticleSystem ExplosionParticleSystem;
+    public ParticleSystem StrengthedParticleSystem;
     private void OnEnable()
     {
         Instance = this;
@@ -104,8 +106,9 @@ public class Weapon : MonoBehaviour
         _energyObject = GameObject.Find("Canvas/Explosion");
         this._explodeAudio = new AudioItem(Resources.Load<AudioClip>("Audio/overload"));
 
-        this._cycleParticleSystem = this.transform.Find("CycleParticleSystem").GetComponent<ParticleSystem>();
-
+        this.CycleParticleSystem = this.transform.Find("CycleParticleSystem").GetComponent<ParticleSystem>();
+        this.ExplosionParticleSystem = this.transform.Find("ExplosionParticleSystem").GetComponent<ParticleSystem>();
+        this.StrengthedParticleSystem = this.transform.Find("StrengthenedParticleSystem").GetComponent<ParticleSystem>();
     }
 
     public void SetBloodActive(bool active)
@@ -172,7 +175,7 @@ public class Weapon : MonoBehaviour
         if (State is WeaponState.Holding or WeaponState.Retrieving)
             return;
 
-        _cycleParticleSystem.Pause();
+        CycleParticleSystem.Pause();
         StartCoroutine(PickupRoutine(holder));
     }
 
@@ -221,7 +224,6 @@ public class Weapon : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     }
-
     public void Drop()
     {
         if (State is WeaponState.Throwing or WeaponState.Retrieving)
@@ -244,7 +246,7 @@ public class Weapon : MonoBehaviour
 
         WeaponBody.constraints = RigidbodyConstraints.None;
         State = WeaponState.Idle;
-        _cycleParticleSystem.Play();
+        CycleParticleSystem.Play();
 
     }
 
@@ -267,6 +269,7 @@ public class Weapon : MonoBehaviour
         _currentThrowSpeed = throwSpeed;
         WeaponBody.constraints = RigidbodyConstraints.FreezeAll;
         State = WeaponState.Throwing;
+        CycleParticleSystem.Pause();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -358,6 +361,8 @@ public class Weapon : MonoBehaviour
             if (this.Mode == WeaponMode.Strengthened)
             {
                 bulletMode = Bullet.BulletMode.Strengthened;
+                // Only shoot one strengthened bullet
+                this.Mode = WeaponMode.Normal;
             }
             BulletManager.Instance.CreateBullet(this.transform.position, direction, bulletMode, target);
         }
@@ -382,6 +387,7 @@ public class Weapon : MonoBehaviour
         _explodeAudio.PlayOn(ExplodeSource);
 
         PlayerCamera.Instance.CurrentShakeStrength += ExplosionShakeStrength;
+        ExplosionParticleSystem.Play();
     }
 
     private List<Transform> FindTransformInChildren(Transform parent, string targetName)

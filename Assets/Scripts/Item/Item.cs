@@ -21,6 +21,7 @@ public class Item : MonoBehaviour
         if (collision.gameObject == Player.Instance.gameObject)
         {
             ItemManager.Instance.RemoveItem(gameObject);
+            Weapon.Instance.Mode = Weapon.WeaponMode.Strengthened;
             GameObject.Destroy(gameObject);
         }
     }

@@ -71,6 +71,9 @@ public class Bullet : MonoBehaviour
             {
                 // AOE damage
                 EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
+                // Particle
+                Weapon.Instance.StrengthedParticleSystem.transform.position = this.transform.position;
+                Weapon.Instance.StrengthedParticleSystem.Play();
             }
         }
         // Destroy bullets

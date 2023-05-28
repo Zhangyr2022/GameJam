@@ -79,6 +79,8 @@ public class Player : MonoBehaviour
     }
     public void Shoot()
     {
+        if (IsDead) return;
+
         SetPlayerAnimation(PlayerState.Attack);
 
         // Compute bullet direction
