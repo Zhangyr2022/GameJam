@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -49,7 +48,7 @@ public class Enemy : MonoBehaviour
         _hp = Mathf.Max(_hp - damage, 0);
         if (Mathf.Approximately(_hp, 0))
         {
-            Die(); 
+            Die();
         }
     }
 
