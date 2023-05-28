@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class Weapon : MonoBehaviour
     public AudioSource PickupSource;
     public AudioSource SpinningSource;
     public AudioSource DropSource;
+    public AudioSource ExplodeSource;
 
     public AudioItem[] PickupSounds;
     public AudioItem DropSound;
@@ -58,13 +60,17 @@ public class Weapon : MonoBehaviour
 
     private float lastBloodTime = -100f;
 
-    public const float ShootBulletsInterval = 0.5f;
+    public float ShootBulletsInterval = 0.5f;
     private float _lastShootTime;
 
     private float _lastExplodeTime = 0.1f;
-    public const float ExplosionInterval = 10;
-    public const float ExplosionRange = 1.5f;
-    public const float ExplosionDamage = 10;
+    public float ExplosionInterval = 10;
+    public float ExplosionRange = 3f;
+    public float ExplosionDamage = 10;
+    private Image _energyImage;
+    private GameObject _energyObject;
+    private AudioItem _explodeAudio;
+
 
     private void OnEnable()
     {
@@ -80,6 +86,7 @@ public class Weapon : MonoBehaviour
         this.PickupSource = audioSources[1];
         this.SpinningSource = audioSources[2];
         this.DropSource = audioSources[3];
+        this.ExplodeSource = audioSources[4];
         // Pickup Sounds
         List<AudioItem> pickupSoundsList = new();
         for (int i = 1; i <= 3; i++)
@@ -90,6 +97,9 @@ public class Weapon : MonoBehaviour
 
         // Drop sound
         this.DropSound = new AudioItem(Resources.Load<AudioClip>($"Audio/placeCane"));
+        _energyImage = GameObject.Find("Canvas/Explosion/Energy").GetComponent<Image>();
+        _energyObject = GameObject.Find("Canvas/Explosion");
+        this._explodeAudio = new AudioItem(Resources.Load<AudioClip>("Audio/overload"));
     }
 
     public void SetBloodActive(bool active)
@@ -126,6 +136,22 @@ public class Weapon : MonoBehaviour
         {
             Explode();
             this._lastExplodeTime = Time.time;
+        }
+
+        // Update energy image
+        _energyImage.fillAmount += 1.0f / ExplosionInterval * Time.deltaTime;
+        if (_energyImage.fillAmount > 0.999f)
+        {
+            _energyImage.fillAmount = 0;
+            _energyObject.transform.eulerAngles = Vector3.zero;
+        }
+        else if (_energyImage.fillAmount > 0.8f)
+        {
+            // Shaking
+            _energyObject.transform.eulerAngles = new Vector3(0, 0, Random.Range(-10, 10));
+        }
+        else
+        {
         }
     }
 
@@ -342,6 +368,8 @@ public class Weapon : MonoBehaviour
         {
             Player.Instance.Damage();
         }
+        // Play Sound
+        _explodeAudio.PlayOn(ExplodeSource);
     }
 
     private List<Transform> FindTransformInChildren(Transform parent, string targetName)

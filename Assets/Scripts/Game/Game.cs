@@ -71,6 +71,7 @@ public class Game : MonoBehaviour
         if (_gameState == GameState.Play)
         {
             // Do not display the restart view
+            EnemyManager.Instance.StopAll();
             _endingView.SetActive(false);
         }
         else if (_gameState == GameState.Stop)
