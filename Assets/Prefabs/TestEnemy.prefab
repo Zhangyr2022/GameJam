@@ -215,8 +215,8 @@ MonoBehaviour:
   Particle: {fileID: 1004776764570892254, guid: 2c5b089beb497f64487e21463d0b9fd2, type: 3}
   ShootStart: {fileID: 848564033}
   Bullet: {fileID: 7581666762792152480, guid: 3a29b8f3a0ad37643adc665c892b7171, type: 3}
-  MaxShootInterval: 4
-  MinShootInterval: 1
+  MaxShootInterval: 6
+  MinShootInterval: 3
   BulletSpeed: 4
   Remain: {fileID: 8664090271601503051, guid: 79f09097c16f5b54292679f840617630, type: 3}
   RemainDuration: 3
