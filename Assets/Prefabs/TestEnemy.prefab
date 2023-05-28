@@ -214,8 +214,9 @@ MonoBehaviour:
   GrowSpeed: 1
   ShootStart: {fileID: 848564033}
   Bullet: {fileID: 7581666762792152480, guid: 3a29b8f3a0ad37643adc665c892b7171, type: 3}
-  ShootInterval: 2
-  BulletSpeed: 3
+  MaxShootInterval: 4
+  MinShootInterval: 1
+  BulletSpeed: 4
   Remain: {fileID: 8664090271601503051, guid: 79f09097c16f5b54292679f840617630, type: 3}
   RemainDuration: 3
 --- !u!114 &605350188211823984

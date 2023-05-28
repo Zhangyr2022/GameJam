@@ -21,11 +21,12 @@ public class Chunk : MonoBehaviour
         if (!Evil)
         {
             _hp = Mathf.Max(_hp - damage, 0);
-            Evil = _hp == 0;
-            float r = Mathf.Lerp(CorruptedColor.r, HealthyColor.r, _hp * 1.0f / MaxHP);
-            float g = Mathf.Lerp(CorruptedColor.g, HealthyColor.g, _hp * 1.0f / MaxHP);
-            float b = Mathf.Lerp(CorruptedColor.b, HealthyColor.b, _hp * 1.0f / MaxHP);
-            _mat.color = new Color(r, g, b);
+            if (_hp == 0)
+            {
+                Evil = true;
+                GridManager.Instance.UpdateEvilCnt(1);
+            }
+            _mat.color = Color.Lerp(CorruptedColor, HealthyColor, _hp * 1.0f / MaxHP);
         }
     }
 
@@ -35,7 +36,11 @@ public class Chunk : MonoBehaviour
         _mat.color = HealthyColor;
 
         if (Evil)
+        {
             Evil = false;
+            GridManager.Instance.UpdateEvilCnt(-1);
+        }
+
     }
 
     // Start is called before the first frame update

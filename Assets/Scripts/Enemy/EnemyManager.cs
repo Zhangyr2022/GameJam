@@ -52,10 +52,32 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    public void StopAll()
+    {
+        Debug.Log("STOP ALL");
+        _toGenerateCount = 0;
+        foreach (var kv in _enemies)
+            GameObject.Destroy(kv.Value);
+
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
+        foreach (var bullet in bullets)
+            GameObject.Destroy(bullet);
+    }
+
+    private void Win()
+    {
+        StopAll();
+        Game.Instance.ChangeGameState(Game.GameState.HappyEnding);
+    }
+
     private void NextWave()
     {
-        if (CurWave == WaveCount)
+        if (CurWave == WaveCount || (CurWave >= 7 && GridManager.Instance.GetEvilRatio() <= 0.4))
+        {
+            Win();
             return;
+        }
+
         CurWave++;
         _toGenerateCount = CurWave;
     }
@@ -132,8 +154,9 @@ public class EnemyManager : MonoBehaviour
             GenerateEnemy();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Minus))
         {
+            // StopAll();
             Debug.Log("BOOM");
             DoAOEDamage(Vector3.zero, 100, 100);
         }
