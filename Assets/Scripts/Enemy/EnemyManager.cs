@@ -77,6 +77,7 @@ public class EnemyManager : MonoBehaviour
             used.Add(pos, true);
 
             GameObject enemy = GameObject.Instantiate(EnemyInstance, new Vector3(pos.x + 0.5f, 0.9f, pos.y + 0.5f), Quaternion.identity);
+            enemy.layer = LayerMask.NameToLayer("Enemy");
             enemy.name = "Enemy" + _enemies.Count.ToString();
             _enemies.Add(enemy.name, enemy);
             _toGenerateCount--;

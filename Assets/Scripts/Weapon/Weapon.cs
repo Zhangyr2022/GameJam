@@ -33,7 +33,7 @@ public class Weapon : MonoBehaviour
     public AudioItem DropSound;
     public Vector2 SpinningPitch = new Vector2(0.8f, 1f);
 
-    public const float AOERange = 5;
+    public const float AOERange = 2;
     public const float AOEDamage = 1;
     public enum WeaponState
     {
@@ -66,10 +66,10 @@ public class Weapon : MonoBehaviour
         this.Blood = GameObject.Find("Particals");
         this.WeaponBody = this.GetComponent<Rigidbody>();
         SetBloodActive(false);
-        this.WobbleRoot = this.transform;
-        this.RotateAround = this.transform;
+        this.WobbleRoot = this.transform.Find("WobbleRoot");
+        this.RotateAround = this.transform.Find("WobbleRoot/RotateAround");
         // Audio sources
-        AudioSource[] audioSources = this.GetComponents<AudioSource>();
+        AudioSource[] audioSources = this.GetComponentsInChildren<AudioSource>();
         this.StuckSource = audioSources[0];
         this.PickupSource = audioSources[1];
         this.SpinningSource = audioSources[2];
@@ -88,13 +88,16 @@ public class Weapon : MonoBehaviour
 
     public void SetBloodActive(bool active)
     {
-        foreach (var p in Blood.GetComponentsInChildren<ParticleSystem>())
-        {
-            if (active && !p.isPlaying)
-                p.Play();
-            else if (!active && p.isPlaying)
-                p.Stop();
-        }
+        // TODO:
+        // Effects when damaged
+
+        //foreach (var p in Blood.GetComponentsInChildren<ParticleSystem>())
+        //{
+        //    if (active && !p.isPlaying)
+        //        p.Play();
+        //    else if (!active && p.isPlaying)
+        //        p.Stop();
+        //}
     }
     private void FixedUpdate()
     {

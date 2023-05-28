@@ -28,7 +28,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void Start()
     {
-        Camera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+        Camera = this.GetComponentInChildren<Camera>();
         _initialOffset = transform.position - _player.transform.position;
     }
 

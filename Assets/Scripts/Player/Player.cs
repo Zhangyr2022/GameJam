@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
         GameObject mouseRaycastObject = GetMouseRaycastObject();
         if (mouseRaycastObject is not null)
         {
-            if (mouseRaycastObject.layer == LayerMask.NameToLayer("enemy"))
+            if (mouseRaycastObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 // Shoot
                 Weapon.Instance.ShootBullets(direction);
@@ -100,7 +100,7 @@ public class Player : MonoBehaviour
     {
         this._health = MaxHealth;
         this.PlayerInputHandler = PlayerInput.Instance;
-        this.rig = this.transform;
+        this.rig = this.transform.Find("Rig");
         this.rb = this.GetComponent<Rigidbody>();
         // FootStep Sound
         FootstepSource = this.GetComponent<AudioSource>();
@@ -187,7 +187,7 @@ public class Player : MonoBehaviour
 
     private Vector3 GetMouseWorldPosition()
     {
-        var ray = PlayerCamera.Instance.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        var ray = PlayerCamera.Instance.Camera.ScreenPointToRay(Input.mousePosition);
         var plane = new Plane(Vector3.up, Vector3.zero);
         if (plane.Raycast(ray, out float hitDistance))
         {

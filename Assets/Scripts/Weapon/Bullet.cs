@@ -5,10 +5,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public const float AOEDamage = 1f;
-    public const float AOERange = 5f;
+    public const float AOERange = 2f;
     public const float ShootDamage = 2f;
-    public const float ShootRange = 20f;
-    public const float TravelSpeed = 5f;
+    public const float ShootRange = 8f;
+    public const float TravelSpeed = 3f;
 
     public enum BulletMode
     {
@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour
     public void InitializeBullet(Vector3 position, Vector3 direction, BulletMode mode)
     {
         this.transform.position = _shooterPosition = position;
-        this._shootDirection = Vector3.Normalize(direction);
+        this._shootDirection = (direction);
         this._mode = mode;
     }
 
@@ -48,9 +48,8 @@ public class Bullet : MonoBehaviour
     {
         // Shoot enemies
         GameObject collisionObject = collision.gameObject;
-        if (collisionObject.layer == LayerMask.NameToLayer("enemy"))
+        if (collisionObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-
             Enemy enemy = collisionObject.GetComponent<Enemy>();
             enemy.DoDamage(ShootDamage);
 
@@ -59,8 +58,8 @@ public class Bullet : MonoBehaviour
                 // AOE damage
                 EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
             }
-            // Destroy bullets
-            Destroy(this);
         }
+        // Destroy bullets
+        Destroy(this.gameObject);
     }
 }

@@ -18,7 +18,10 @@ public class BulletManager : MonoBehaviour
     {
         GameObject newBulletObject = GameObject.Instantiate(_bulletPrefab);
         Bullet bullet = newBulletObject.AddComponent<Bullet>();
-        bullet.InitializeBullet(position, direction, mode);
+        // To avoid colliding with player, the initial position of the bullet should be a little away from player
+        Vector3 correctedDirection = Vector3.Normalize(new Vector3(direction.x, direction.y * 0.1f, direction.z));
+        position += correctedDirection;
+        bullet.InitializeBullet(position, correctedDirection, mode);
     }
 
     private void Awake()
