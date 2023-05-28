@@ -11,7 +11,11 @@ public class Enemy : MonoBehaviour
     public Transform ShootStart;
     public GameObject Bullet;
 
-    public float ShootInterval;
+    public float MaxShootInterval;
+
+    public float MinShootInterval;
+
+    // public float ShootInterval;
 
     public float BulletSpeed;
 
@@ -104,7 +108,8 @@ public class Enemy : MonoBehaviour
         }
         else if (_state == State.Alive)
         {
-            if (Time.time - _lastShootTime >= ShootInterval)
+            float shootInterval = Mathf.Lerp(MinShootInterval, MaxShootInterval, GridManager.Instance.GetEvilRatio());
+            if (Time.time - _lastShootTime >= shootInterval)
             {
                 _lastShootTime = Time.time;
                 Shoot();
