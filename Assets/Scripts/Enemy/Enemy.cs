@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -39,12 +41,15 @@ public class Enemy : MonoBehaviour
 
     private float _lastShootTime;
 
+    private AudioSource _audioSource;
+    private AudioItem _deadAudio;
+
     public void DoDamage(float damage)
     {
         _hp = Mathf.Max(_hp - damage, 0);
         if (Mathf.Approximately(_hp, 0))
         {
-            Die();
+            Die(); 
         }
     }
 
@@ -59,6 +64,9 @@ public class Enemy : MonoBehaviour
         Game.Instance.AddScore(1);
         EnemyManager.Instance.RemoveEnemy(gameObject);
         GridManager.Instance.CleanChunk(_currentPos);
+
+        // Play dead audio
+        this._deadAudio.PlayOn(_audioSource);
 
         GameObject remain = GameObject.Instantiate(Remain, transform.position, Quaternion.identity);
         GameObject.Destroy(gameObject);
@@ -82,6 +90,17 @@ public class Enemy : MonoBehaviour
         _motor.SetScale(_size);
 
         // GetComponent<Rigidbody>().centerOfMass = transform.Find("foot").localPosition;
+        // Try get audioSource
+        bool result = TryGetComponent<AudioSource>(out AudioSource audioSource);
+        if (result)
+        {
+            _audioSource = audioSource;
+        }
+        else
+        {
+            _audioSource = this.AddComponent<AudioSource>();
+        }
+        this._deadAudio = new AudioItem(Resources.Load<AudioClip>("Audio/sprout"));
     }
 
     // Update is called once per frame
