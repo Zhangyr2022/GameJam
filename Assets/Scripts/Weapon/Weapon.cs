@@ -35,8 +35,9 @@ public class Weapon : MonoBehaviour
     public AudioItem DropSound;
     public Vector2 SpinningPitch = new Vector2(0.8f, 1f);
 
-    public const float AOERange = 2;
-    public const float AOEDamage = 1;
+    public float AOERange = 2;
+    public float AOEDamage = 1;
+    public float FlyingDamage = 3f;
     public enum WeaponState
     {
         Idle,
@@ -63,15 +64,17 @@ public class Weapon : MonoBehaviour
     public float ShootBulletsInterval = 0.5f;
     private float _lastShootTime;
 
-    private float _lastExplodeTime = 0.1f;
+    public float LastExplodeTime = 0.0f;
     public float ExplosionInterval = 10;
     public float ExplosionRange = 3f;
     public float ExplosionDamage = 10;
-    private Image _energyImage;
+    public float ExplosionShakeStrength = 2.0f;
+
+    public Image _energyImage;
     private GameObject _energyObject;
     private AudioItem _explodeAudio;
 
-
+    private ParticleSystem _cycleParticleSystem;
     private void OnEnable()
     {
         Instance = this;
@@ -100,6 +103,9 @@ public class Weapon : MonoBehaviour
         _energyImage = GameObject.Find("Canvas/Explosion/Energy").GetComponent<Image>();
         _energyObject = GameObject.Find("Canvas/Explosion");
         this._explodeAudio = new AudioItem(Resources.Load<AudioClip>("Audio/overload"));
+
+        this._cycleParticleSystem = this.transform.Find("CycleParticleSystem").GetComponent<ParticleSystem>();
+
     }
 
     public void SetBloodActive(bool active)
@@ -132,14 +138,15 @@ public class Weapon : MonoBehaviour
             WeaponBody.position = transform.position;
         }
 
-        if (Time.time - this._lastExplodeTime > ExplosionInterval)
+        float deltaTime = Time.time - this.LastExplodeTime;
+        if (deltaTime > ExplosionInterval)
         {
             Explode();
-            this._lastExplodeTime = Time.time;
+            this.LastExplodeTime = Time.time;
         }
 
         // Update energy image
-        _energyImage.fillAmount += 1.0f / ExplosionInterval * Time.deltaTime;
+        _energyImage.fillAmount = deltaTime / ExplosionInterval;
         if (_energyImage.fillAmount > 0.999f)
         {
             _energyImage.fillAmount = 0;
@@ -165,6 +172,7 @@ public class Weapon : MonoBehaviour
         if (State is WeaponState.Holding or WeaponState.Retrieving)
             return;
 
+        _cycleParticleSystem.Pause();
         StartCoroutine(PickupRoutine(holder));
     }
 
@@ -236,6 +244,7 @@ public class Weapon : MonoBehaviour
 
         WeaponBody.constraints = RigidbodyConstraints.None;
         State = WeaponState.Idle;
+        _cycleParticleSystem.Play();
 
     }
 
@@ -296,6 +305,7 @@ public class Weapon : MonoBehaviour
                     // kill enemies
                     //var enemy = collision.transform.GetComponentInParent<EnemyControl>();
                     //enemy.Kill();
+                    collision.gameObject.GetComponent<Enemy>().DoDamage(FlyingDamage);
 
                     return;
                 }
@@ -370,6 +380,8 @@ public class Weapon : MonoBehaviour
         }
         // Play Sound
         _explodeAudio.PlayOn(ExplodeSource);
+
+        PlayerCamera.Instance.CurrentShakeStrength += ExplosionShakeStrength;
     }
 
     private List<Transform> FindTransformInChildren(Transform parent, string targetName)

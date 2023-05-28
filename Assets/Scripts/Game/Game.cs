@@ -28,7 +28,6 @@ public class Game : MonoBehaviour
 
     private GameState _gameState;
     private float _score = 0;
-
     public void ChangeGameState(GameState newState)
     {
         if (_gameState != newState)
@@ -56,6 +55,12 @@ public class Game : MonoBehaviour
         {
             ChangeGameState(GameState.Play);
             _player.Revive();
+
+            EnemyManager.Instance.Reset();
+            GridManager.Instance.Reset();
+            ItemManager.Instance.Reset();
+
+            this._score = 0;
         });
 
         _endingView.SetActive(false);
@@ -71,7 +76,6 @@ public class Game : MonoBehaviour
         if (_gameState == GameState.Play)
         {
             // Do not display the restart view
-            EnemyManager.Instance.StopAll();
             _endingView.SetActive(false);
         }
         else if (_gameState == GameState.Stop)

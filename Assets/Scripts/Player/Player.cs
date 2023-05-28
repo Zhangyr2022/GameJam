@@ -68,9 +68,7 @@ public class Player : MonoBehaviour
             DeadAudio.PlayOn(DeadSource);
         SetPlayerAnimation(PlayerState.Dead);
         this._health = 0;
-
     }
-
     public void PickUpWeapon()
     {
         Weapon.Instance.Pickup(this.transform);
@@ -107,6 +105,7 @@ public class Player : MonoBehaviour
         _health = MaxHealth;
         // Play sound
         ReviveAudio.PlayOn(ReviveSource);
+        Weapon.Instance.LastExplodeTime = Time.time;
     }
 
 

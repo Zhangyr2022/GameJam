@@ -40,6 +40,7 @@ public class Bullet : MonoBehaviour
             Vector3 shootDirection = (_target.transform.position - this.transform.position).normalized;
             this._shootDirection = shootDirection;
             this.transform.Translate(Time.deltaTime * TravelSpeed * _shootDirection);
+            //this.transform.LookAt(this._target.transform);
         }
         this._travelDistance += Time.deltaTime * TravelSpeed;
         // Check if the distance is in the shoot range
