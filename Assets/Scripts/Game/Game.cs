@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
-    public Game Instance;
+    public static Game Instance;
     public enum GameState
     {
         Stop,
