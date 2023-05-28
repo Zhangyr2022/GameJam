@@ -29,6 +29,15 @@ public class ItemManager : MonoBehaviour
         _lastGen = Time.time;
     }
 
+    public void Reset()
+    {
+        _lastGen = Time.time;
+        foreach (var kv in _items)
+            GameObject.Destroy(kv.Value);
+
+        _items.Clear();
+    }
+
     private void Generate()
     {
         List<Vector2Int> positions = GridManager.Instance.GetValidChunks(false, new Dictionary<Vector2Int, int>());
@@ -51,7 +60,7 @@ public class ItemManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        _lastGen = Time.time;
     }
 
     // Update is called once per frame

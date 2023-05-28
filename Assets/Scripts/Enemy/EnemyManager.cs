@@ -58,10 +58,23 @@ public class EnemyManager : MonoBehaviour
         _toGenerateCount = 0;
         foreach (var kv in _enemies)
             GameObject.Destroy(kv.Value);
+        _enemies.Clear();
+        _occupied.Clear();
 
         GameObject[] bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
         foreach (var bullet in bullets)
             GameObject.Destroy(bullet);
+
+        GameObject[] remains = GameObject.FindGameObjectsWithTag("Remain");
+        foreach (var remain in remains)
+            GameObject.Destroy(remain);
+    }
+
+    public void Reset()
+    {
+        StopAll();
+        CurWave = 0;
+        NextWave();
     }
 
     private void Win()
@@ -159,6 +172,14 @@ public class EnemyManager : MonoBehaviour
             // StopAll();
             Debug.Log("BOOM");
             DoAOEDamage(Vector3.zero, 100, 100);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            Debug.Log("RESET");
+            EnemyManager.Instance.Reset();
+            GridManager.Instance.Reset();
+            ItemManager.Instance.Reset();
         }
     }
 }
