@@ -60,6 +60,20 @@ public class GridManager : MonoBehaviour
         return ret;
     }
 
+    public void Reset()
+    {
+        _evilCnt = 0;
+        foreach (var kv in _grid)
+        {
+            Chunk chunk = kv.Value;
+            chunk.Reset();
+            if (chunk.Evil)
+                _evilCnt++;
+        }
+        float frac = 1.0f * _evilCnt / _grid.Count;
+        ChangeSkybox(frac);
+    }
+
     private void Win()
     {
         EnemyManager.Instance.StopAll();

@@ -16,6 +16,15 @@ public class Chunk : MonoBehaviour
 
     private Material _mat;
 
+    private bool _oriEvil;
+
+    public void Reset()
+    {
+        _hp = MaxHP;
+        Evil = _oriEvil;
+        _mat.color = Evil ? CorruptedColor : HealthyColor;
+    }
+
     public void DoDamage(int damage)
     {
         if (!Evil)
@@ -47,6 +56,7 @@ public class Chunk : MonoBehaviour
     void Start()
     {
         _hp = MaxHP;
+        _oriEvil = Evil;
         _mat = gameObject.GetComponent<MeshRenderer>().materials[1];
         _mat.color = Evil ? CorruptedColor : HealthyColor;
 
