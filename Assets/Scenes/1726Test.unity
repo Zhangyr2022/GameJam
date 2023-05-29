@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.3463344, g: 0.7415042, b: 0.7917474, a: 1}
+  m_IndirectSpecularColor: {r: 0.3412063, g: 0.74024045, b: 0.7914386, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -16178,13 +16178,22 @@ MonoBehaviour:
   DropSource: {fileID: 0}
   ExplodeSource: {fileID: 0}
   SpinningPitch: {x: 0.8, y: 1}
+  AOERange: 2
+  AOEDamage: 1
+  FlyingDamage: 3
   State: 0
   Mode: 0
   CurrentWeaponTarget: {fileID: 0}
   ShootBulletsInterval: 0.5
+  LastExplodeTime: 0
   ExplosionInterval: 10
   ExplosionRange: 3
   ExplosionDamage: 10
+  ExplosionShakeStrength: 2
+  _energyImage: {fileID: 0}
+  CycleParticleSystem: {fileID: 0}
+  ExplosionParticleSystem: {fileID: 0}
+  StrengthedParticleSystem: {fileID: 0}
 --- !u!136 &1265048067
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19407,6 +19416,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1760561313, guid: 868a0ae1223b0be4ca2572853914f9eb, type: 3}
+      propertyPath: MaxItemCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1760561313, guid: 868a0ae1223b0be4ca2572853914f9eb, type: 3}
+      propertyPath: GenerationInterval
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7379505060702274904, guid: 868a0ae1223b0be4ca2572853914f9eb, type: 3}
       propertyPath: m_RootOrder
       value: 7

@@ -88,5 +88,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemInstance: {fileID: 6748053317782163574, guid: 8baf1d0283cbacc40a057687affef4d4, type: 3}
-  MaxItemCount: 1
-  GenerationInterval: 5
+  MaxItemCount: 3
+  GenerationInterval: 1
