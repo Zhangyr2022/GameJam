@@ -90,7 +90,7 @@ public class Player : MonoBehaviour
         GameObject mouseRaycastObject = GetMouseRaycastObject();
         if (mouseRaycastObject is not null)
         {
-            if (mouseRaycastObject.layer == LayerMask.NameToLayer("Enemy"))
+            if (mouseRaycastObject.layer == LayerMask.NameToLayer("Enemy") || mouseRaycastObject.layer == LayerMask.NameToLayer("MouseCollider"))
             {
                 // Shoot
                 Weapon.Instance.ShootBullets(direction, mouseRaycastObject);

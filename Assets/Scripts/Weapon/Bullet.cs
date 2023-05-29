@@ -66,15 +66,16 @@ public class Bullet : MonoBehaviour
         {
             Enemy enemy = collisionObject.GetComponent<Enemy>();
             enemy.DoDamage(ShootDamage);
+        }
 
-            if (this._mode == BulletMode.Strengthened)
-            {
-                // AOE damage
-                EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
-                // Particle
-                Weapon.Instance.StrengthedParticleSystem.transform.position = this.transform.position;
-                Weapon.Instance.StrengthedParticleSystem.Play();
-            }
+
+        if (this._mode == BulletMode.Strengthened)
+        {
+            // AOE damage
+            EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
+            // Particle
+            Weapon.Instance.StrengthedParticleSystem.transform.position = this.transform.position;
+            Weapon.Instance.StrengthedParticleSystem.Play();
         }
         // Destroy bullets
         Destroy(this.gameObject);

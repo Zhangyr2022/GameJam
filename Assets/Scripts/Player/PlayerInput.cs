@@ -43,7 +43,15 @@ public class PlayerInput : CharacterControl
         }
         // Press space to drop the weapon
         if (Input.GetKeyDown(KeyCode.Space))
-            _player.DropWeapon();
+        {
+            if (Weapon.Instance.State == Weapon.WeaponState.Holding)
+                _player.DropWeapon();
+            else if (Weapon.Instance.State == Weapon.WeaponState.Stuck || Weapon.Instance.State == Weapon.WeaponState.Idle)
+            {
+                _player.PickUpWeapon();
+            }
+
+        }
 
         var inputRay = _camera.Camera.ScreenPointToRay(Input.mousePosition);
         if (inputPlane.Raycast(inputRay, out var distance))

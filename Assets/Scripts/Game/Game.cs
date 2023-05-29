@@ -139,8 +139,8 @@ public class Game : MonoBehaviour
             this._endingHint.text = $"{endingType} Ending!";
             this._endingViewScore.text = $"Your score: {_score}";
 
-            if (this._gameState == GameState.HappyEnding)
-                Weapon.Instance.LastExplodeTime = Time.time;
+            // Ban explosion
+            Weapon.Instance.LastExplodeTime = Time.time;
         }
     }
 }

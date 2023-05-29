@@ -41,6 +41,8 @@ public class MenuButtonController : MonoBehaviour
     {
         if (_helpView.activeSelf == true && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
         {
+            _audioSource.PlayOneShot(_buttonClip);
+
             SceneManager.LoadScene("MainScene");
         }
     }
