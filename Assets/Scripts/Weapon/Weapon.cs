@@ -392,7 +392,12 @@ public class Weapon : MonoBehaviour
     /// </summary>
     public void AOEShoot()
     {
-        EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
+        if (Time.time - _lastShootTime > ShootBulletsInterval)
+        {
+            this._lastShootTime = Time.time;
+            EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
+            StrengthedParticleSystem.Play();
+        }
     }
 
     private void Explode()

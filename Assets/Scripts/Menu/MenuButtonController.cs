@@ -11,6 +11,8 @@ public class MenuButtonController : MonoBehaviour
 
     private AudioClip _buttonClip;
     private AudioSource _audioSource;
+
+    private GameObject _helpView;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +23,7 @@ public class MenuButtonController : MonoBehaviour
         _startButton.onClick.AddListener(() =>
         {
             _audioSource.PlayOneShot(_buttonClip);
-            SceneManager.LoadScene("MainScene");
+            _helpView.SetActive(true);
         });
 
         _quitButton = GameObject.Find("Canvas/QuitGameButton").GetComponent<Button>();
@@ -30,6 +32,16 @@ public class MenuButtonController : MonoBehaviour
             _audioSource.PlayOneShot(_buttonClip);
             Application.Quit();
         });
-    }
 
+        _helpView = GameObject.Find("Canvas/Help");
+        _helpView.SetActive(false);
+
+    }
+    private void Update()
+    {
+        if (_helpView.activeSelf == true && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
+        {
+            SceneManager.LoadScene("MainScene");
+        }
+    }
 }
