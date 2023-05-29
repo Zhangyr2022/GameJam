@@ -8269,6 +8269,7 @@ GameObject:
   m_Component:
   - component: {fileID: 493329674}
   - component: {fileID: 493329673}
+  - component: {fileID: 493329675}
   m_Layer: 0
   m_Name: BGM
   m_TagString: Untagged
@@ -8387,6 +8388,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &493329675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493329672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5553a777ef0f04d46a3e0573c9ce7762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mouseStyle: {fileID: 0}
 --- !u!1 &494228874
 GameObject:
   m_ObjectHideFlags: 0
@@ -15344,12 +15358,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.54
+      value: -0.384
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15424,20 +15442,24 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800004, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800004, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: InitialModule.startColor.maxColor.a
-      value: 0.49803922
+      value: 0.5882353
       objectReference: {fileID: 0}
     - target: {fileID: 19800004, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.9433962
+      value: 0.9811321
       objectReference: {fileID: 0}
     - target: {fileID: 19800004, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.4393735
+      value: 0.36601523
       objectReference: {fileID: 0}
     - target: {fileID: 19800004, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.18155923
+      value: 0.21658951
       objectReference: {fileID: 0}
     - target: {fileID: 19800004, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: InitialModule.startSizeY.minMaxState
@@ -15460,16 +15482,24 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.40943396
+      value: 0.33043784
       objectReference: {fileID: 0}
     - target: {fileID: 19800006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.6283233
+      value: 0.5647575
       objectReference: {fileID: 0}
     - target: {fileID: 19800006, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
+      value: 0.9622642
       objectReference: {fileID: 0}
     - target: {fileID: 19900000, guid: 60bc526f4be1e044ab9e46340b82ffb3, type: 3}
       propertyPath: m_Materials.Array.size
@@ -19283,7 +19313,7 @@ Transform:
   m_GameObject: {fileID: 1553901070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8, y: 3, z: 8}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 839965938}

@@ -139,7 +139,7 @@ public class Game : MonoBehaviour
             this._endingHint.text = $"{endingType} Ending!";
             this._endingViewScore.text = $"Your score: {_score}";
 
-            // Ban explosion
+            // Ban explosion 
             Weapon.Instance.LastExplodeTime = Time.time;
         }
     }
