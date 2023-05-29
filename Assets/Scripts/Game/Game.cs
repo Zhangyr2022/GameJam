@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
+
+
     public static Game Instance;
     public enum GameState
     {
@@ -28,6 +31,39 @@ public class Game : MonoBehaviour
 
     private GameState _gameState;
     private float _score = 0;
+
+    private int _round = 0;
+
+    public TMP_Text _roundText;
+
+
+    private IEnumerator RoundRoutine(int round)
+    {
+        _roundText.text = $"Round {round}";
+        float t = 0f;
+        yield return Tween(0.5f, t =>
+        {
+            _roundText.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, Mathf.SmoothStep(0f, 1f, t));
+        });
+        yield return new WaitForSeconds(1f);
+        yield return Tween(0.5f, t =>
+        {
+            _roundText.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, Mathf.SmoothStep(0f, 1f, t));
+        });
+    }
+
+    private IEnumerator Tween(float duration, Action<float> onStep)
+    {
+        float t = 0f;
+        while (!Mathf.Approximately(t, 1f))
+        {
+            t = Mathf.Clamp01(t + Time.deltaTime / duration);
+            onStep(t);
+            yield return null;
+        }
+    }
+
+
     public void ChangeGameState(GameState newState)
     {
         if (_gameState != newState)
@@ -65,6 +101,8 @@ public class Game : MonoBehaviour
         _scoreText = GameObject.Find("Canvas/Score").GetComponent<TMP_Text>();
         _endingView.SetActive(false);
 
+        _roundText = GameObject.Find("Canvas/Round").GetComponent<TMP_Text>();
+        _roundText.transform.localScale = default;
     }
     private void Awake()
     {
@@ -75,11 +113,18 @@ public class Game : MonoBehaviour
     {
         if (_gameState == GameState.Play)
         {
+            _roundText.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Sin(Time.time * 40f) * 5f);
             // Do not display the restart view
             _endingView.SetActive(false);
             _scoreText.gameObject.SetActive(true);
 
             _scoreText.text = $"Your score£º{_score}";
+
+            if (_round != EnemyManager.Instance.CurWave)
+            {
+                _round = EnemyManager.Instance.CurWave;
+                StartCoroutine(RoundRoutine(_round));
+            }
         }
         else if (_gameState == GameState.Stop)
         {
@@ -93,6 +138,9 @@ public class Game : MonoBehaviour
             string endingType = this._gameState == GameState.HappyEnding ? "Happy" : "Bad";
             this._endingHint.text = $"{endingType} Ending!";
             this._endingViewScore.text = $"Your score: {_score}";
+
+            if (this._gameState == GameState.HappyEnding)
+                Weapon.Instance.LastExplodeTime = Time.time;
         }
     }
 }

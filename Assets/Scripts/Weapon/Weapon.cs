@@ -396,6 +396,7 @@ public class Weapon : MonoBehaviour
         {
             this._lastShootTime = Time.time;
             EnemyManager.Instance.DoAOEDamage(this.transform.position, AOERange, AOEDamage);
+            StrengthedParticleSystem.gameObject.transform.localPosition = Vector3.zero;
             StrengthedParticleSystem.Play();
         }
     }
