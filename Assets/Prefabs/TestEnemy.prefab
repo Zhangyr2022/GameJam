@@ -218,6 +218,7 @@ MonoBehaviour:
   MaxShootInterval: 6
   MinShootInterval: 3
   BulletSpeed: 4
+  CleanRadius: 1
   Remain: {fileID: 8664090271601503051, guid: 79f09097c16f5b54292679f840617630, type: 3}
   RemainDuration: 3
 --- !u!114 &605350188211823984

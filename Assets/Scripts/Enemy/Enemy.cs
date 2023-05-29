@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour
 
     public float BulletSpeed;
 
+    public int CleanRadius;
+
     public GameObject Remain;
     public float RemainDuration;
 
@@ -64,7 +66,11 @@ public class Enemy : MonoBehaviour
     {
         Game.Instance.AddScore(1);
         EnemyManager.Instance.RemoveEnemy(gameObject);
-        GridManager.Instance.CleanChunk(_currentPos);
+
+        for (int i = -CleanRadius; i <= CleanRadius; i++)
+            for (int j = -CleanRadius; j <= CleanRadius; j++)
+                GridManager.Instance.CleanChunk(new Vector2Int(_currentPos.x + i, _currentPos.y + j));
+
 
         // Play dead audio
         this._deadAudio.PlayOn(_audioSource);
