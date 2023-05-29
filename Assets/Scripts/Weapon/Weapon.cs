@@ -163,6 +163,22 @@ public class Weapon : MonoBehaviour
         else
         {
         }
+
+
+        if (WeaponState.Idle == State || WeaponState.Stuck == State || WeaponState.Throwing == State)
+        {
+            if (!CycleParticleSystem.isPlaying)
+            {
+                PlayAllParticleSystems(CycleParticleSystem);
+            }
+        }
+        else if (WeaponState.Holding == State || WeaponState.Retrieving == State)
+        {
+            if (CycleParticleSystem.isPlaying)
+            {
+                StopAllParticleSystems(CycleParticleSystem);
+            }
+        }
     }
 
     public void Pickup(Transform holder)
@@ -175,7 +191,7 @@ public class Weapon : MonoBehaviour
         if (State is WeaponState.Holding or WeaponState.Retrieving)
             return;
 
-        CycleParticleSystem.Pause();
+        StopAllParticleSystems(CycleParticleSystem);
         StartCoroutine(PickupRoutine(holder));
     }
 
@@ -246,7 +262,7 @@ public class Weapon : MonoBehaviour
 
         WeaponBody.constraints = RigidbodyConstraints.None;
         State = WeaponState.Idle;
-        CycleParticleSystem.Play();
+
 
     }
 
@@ -269,7 +285,6 @@ public class Weapon : MonoBehaviour
         _currentThrowSpeed = throwSpeed;
         WeaponBody.constraints = RigidbodyConstraints.FreezeAll;
         State = WeaponState.Throwing;
-        CycleParticleSystem.Pause();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -412,5 +427,24 @@ public class Weapon : MonoBehaviour
         }
 
         return foundTransforms;
+    }
+
+    private void StopAllParticleSystems(ParticleSystem particleSystem)
+    {
+        ParticleSystem[] particleSystems = particleSystem.GetComponentsInChildren<ParticleSystem>(true);
+
+        foreach (ParticleSystem ps in particleSystems)
+        {
+            ps.Stop();
+        }
+    }
+    private void PlayAllParticleSystems(ParticleSystem particleSystem)
+    {
+        ParticleSystem[] particleSystems = particleSystem.GetComponentsInChildren<ParticleSystem>(true);
+
+        foreach (ParticleSystem ps in particleSystems)
+        {
+            ps.Play();
+        }
     }
 }
