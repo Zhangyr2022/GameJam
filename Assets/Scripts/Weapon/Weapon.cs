@@ -167,16 +167,21 @@ public class Weapon : MonoBehaviour
 
         if (WeaponState.Idle == State || WeaponState.Stuck == State || WeaponState.Throwing == State)
         {
-            if (!CycleParticleSystem.isPlaying)
+            if (CycleParticleSystem.gameObject.activeSelf == false)
             {
+                CycleParticleSystem.gameObject.SetActive(true);
+
                 PlayAllParticleSystems(CycleParticleSystem);
+                //Debug.Log("open");
             }
         }
         else if (WeaponState.Holding == State || WeaponState.Retrieving == State)
         {
-            if (CycleParticleSystem.isPlaying)
+            if (CycleParticleSystem.gameObject.activeSelf == true)
             {
-                StopAllParticleSystems(CycleParticleSystem);
+                CycleParticleSystem.gameObject.SetActive(false);
+                //StopAllParticleSystems(CycleParticleSystem);
+                //Debug.Log("close");
             }
         }
     }
@@ -435,7 +440,7 @@ public class Weapon : MonoBehaviour
 
         foreach (ParticleSystem ps in particleSystems)
         {
-            ps.Stop();
+            ps.Pause();
         }
     }
     private void PlayAllParticleSystems(ParticleSystem particleSystem)

@@ -24,7 +24,7 @@ public class Game : MonoBehaviour
     private TMP_Text _endingViewScore;
     private Button _restartButton;
     private Player _player => Player.Instance;
-
+    private TMP_Text _scoreText;
 
     private GameState _gameState;
     private float _score = 0;
@@ -62,7 +62,7 @@ public class Game : MonoBehaviour
 
             this._score = 0;
         });
-
+        _scoreText = GameObject.Find("Canvas/Score").GetComponent<TMP_Text>();
         _endingView.SetActive(false);
 
     }
@@ -77,6 +77,9 @@ public class Game : MonoBehaviour
         {
             // Do not display the restart view
             _endingView.SetActive(false);
+            _scoreText.gameObject.SetActive(true);
+
+            _scoreText.text = $"Your score£º{_score}";
         }
         else if (_gameState == GameState.Stop)
         {
@@ -85,6 +88,7 @@ public class Game : MonoBehaviour
         else
         {
             // Display the restart view
+            _scoreText.gameObject.SetActive(false);
             _endingView.SetActive(true);
             string endingType = this._gameState == GameState.HappyEnding ? "Happy" : "Bad";
             this._endingHint.text = $"{endingType} Ending!";
